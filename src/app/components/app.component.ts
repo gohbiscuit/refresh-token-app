@@ -1,17 +1,16 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { TokenService } from '../services/token.service';
+import { TokenResponse } from '../models/token-response.model';
 
 @Component({
   selector: 'app-root',
-  // standalone: true,
-  // imports: [CommonModule], // Include CommonModule if using common directives
   template: `
     <mat-toolbar color="primary">
       <span>
         <button mat-button>Refresh Token Application v1.0</button>
         <button mat-button class="btn-home"><mat-icon>home</mat-icon></button>
-        <button mat-button class="btn-refresh-token">
+        <button mat-button class="btn-refresh-token" (click)="refreshTokens()">
           <mat-icon>gamepad</mat-icon>
           Refresh Access Token
         </button>
@@ -75,23 +74,11 @@ export class AppComponent implements OnInit {
     // const str = location.href.replace(location.search, '');
     // console.log('str is >> ', str);
     if (this.isLoggedIn) {
-      this.accessToken = this.tokenService.getAccessToken() ?? '';
+      this.accessToken = '';
       this.refreshToken = this.tokenService.getRefreshToken() ?? '';
+      this.refreshTokens();
     }
   }
-
-  // refreshTokenIfNeeded() {
-  //   if (!this.authService.isLoggedIn().getValue()) {
-  //     this.authService.refreshToken().subscribe({
-  //       next: (token) => {
-  //         console.log('Token refreshed successfully', token);
-  //       },
-  //       error: (error) => {
-  //         console.error('Failed to refresh token', error);
-  //       },
-  //     });
-  //   }
-  // }
 
   public login(): void {
     // Initiate login process
@@ -111,35 +98,32 @@ export class AppComponent implements OnInit {
     console.log('handle Login!!!');
     this.authService.login();
     this.isLoggedIn = true;
-    this.accessToken = this.tokenService.getAccessToken() ?? '';
+    this.accessToken = '';
     this.refreshToken = this.tokenService.getRefreshToken() ?? '';
   }
 
-  // refreshTokens(): void {
-  //   if (this.refreshToken) {
-  //     this.tokenService.refreshToken(this.refreshToken).subscribe(
-  //       (response) => {
-  //         const tokens = response as TokenResponse;
-  //         this.refreshToken = response.refresh_token;
-  //         this.accessToken = response.access_token;
-  //         const expiresAt = response.expires_at;
+  refreshTokens(): void {
+    const refreshToken = this.tokenService.getRefreshToken();
+    if (refreshToken) {
+      this.tokenService.refreshToken(refreshToken).subscribe(
+        (response) => {
+          console.log('Token refreshed successfully');
+          const tokens = response as TokenResponse;
+          const newRefreshToken = tokens.refresh_token;
+          const accessToken = tokens.access_token;
+          const expiresAt = tokens.expires_at;
 
-  //         // Replace old refresh token with new one in localStorage
-  //         this.tokenService.saveRefreshToken(this.refreshToken);
-
-  //         // Display or use access token as needed
-  //         console.log('Access Token:', this.accessToken);
-  //         console.log('Expires At:', expiresAt);
-  //       },
-  //       (error) => {
-  //         console.error('Token refresh failed:', error);
-  //       }
-  //     );
-  //   }
-  // }
+          // Replace old refresh token with new one in localStorage
+          this.tokenService.saveRefreshToken(newRefreshToken);
+        },
+        (error: any) => {
+          console.error('Failed to refresh token', error);
+        }
+      );
+    }
+  }
 
   logout(): void {
     localStorage.clear();
-    // this.authService.logout();
   }
 }

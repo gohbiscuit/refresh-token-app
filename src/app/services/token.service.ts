@@ -10,14 +10,6 @@ import { environment } from '../environments/environment';
 export class TokenService {
   constructor(private http: HttpClient) {}
 
-  public saveAccessToken(accessToken: string): void {
-    localStorage.setItem('access_token', accessToken);
-  }
-
-  getAccessToken(): string | null {
-    return localStorage.getItem('access_token');
-  }
-
   public saveRefreshToken(refreshToken: string): void {
     localStorage.setItem('refresh_token', refreshToken);
   }
@@ -68,6 +60,7 @@ export class TokenService {
     const requestBody = {
       grant_type: 'authorization_code',
       client_id: environment.clientId,
+      client_secret: environment.clientSecret,
       code: code,
       redirect_uri: environment.redirectUrl,
       code_verifier: codeVerifier,
@@ -87,15 +80,12 @@ export class TokenService {
       'Content-Type': 'application/x-www-form-urlencoded',
       Accept: 'application/json',
     });
-    return this.http.post<any>(
-      '/api/oauth/token',
-      {
-        grant_type: 'refresh_token',
-        refresh_token: refreshToken,
-      },
-      {
-        headers: headers,
-      }
-    );
+    const requestBody = {
+      grant_type: 'refresh_token',
+      refresh_token: refreshToken,
+    };
+    return this.http.post<any>(environment.oauthTokenUrl, requestBody, {
+      headers: headers,
+    });
   }
 }

@@ -10,7 +10,7 @@ class MockCookieService {
   set = jasmine.createSpy('set');
 }
 
-describe('PkceService Tests', () => {
+describe('AuthService Tests', () => {
   let pckeService: PkceService;
   let service: AuthService;
   let cookieService: CookieService;
@@ -57,11 +57,4 @@ describe('PkceService Tests', () => {
     const generatedUrl = service.generateAuthorizationUrl(state, codeChallenge);
     expect(generatedUrl).toEqual(expectedUrl);
   });
-
-  // Additional test to ensure the base64url encoding is done correctly
-  // it('should properly encode in base64url format', () => {
-  //   const input = new Uint8Array([43, 47, 61]); // Corresponds to '+/='
-  //   const result = service.base64UrlEncode(input);
-  //   expect(result).toEqual('K_Lw'); // Expected base64url output without '+', '/', and '='
-  // });
 });

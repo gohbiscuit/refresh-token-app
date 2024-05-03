@@ -49,25 +49,21 @@ export class AuthComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private http: HttpClient,
     private authService: AuthService
   ) {}
 
-  refreshCurrentCookieAndLocalStorage() {
+  refreshStateUI() {
     this.currentCookie = document.cookie;
     this.currentLocalStorage = JSON.stringify(localStorage);
   }
 
   ngOnInit() {
-    // this.authService.handleAuthorizationRedirect();
-    console.log('AuthComponent!!');
-    this.refreshCurrentCookieAndLocalStorage();
+    this.refreshStateUI();
 
     this.activatedRoute.queryParams.subscribe((params) => {
-      this.refreshCurrentCookieAndLocalStorage();
       const error = params['error'];
       if (!!error) {
-        console.error('error occurs >> ' + error);
+        console.error('AuthComponent error occurs on load>> ' + error);
         return;
       }
       const response: AuthorizationResponse = {
@@ -76,12 +72,25 @@ export class AuthComponent implements OnInit {
       };
       console.log('state is >>> ', response.state);
       console.log('code is >>> ', response.code);
+      const savedLocalStorageState = localStorage.getItem('state');
+
       if (
         response.state &&
         response.code &&
-        this.authService.isCookieExist(response.state)
+        savedLocalStorageState === response.state
       ) {
-        this.authService.handleCodeExchange(response.state, response.code);
+        this.authService.handleCodeExchangeAndDeleteCookie(
+          response.state,
+          response.code
+        );
+        this.refreshStateUI();
+      } else {
+        console.log(
+          'different state > ' +
+            response.state +
+            '   vs local storage ' +
+            savedLocalStorageState
+        );
       }
     });
   }
