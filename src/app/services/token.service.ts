@@ -43,7 +43,7 @@ export class TokenService {
     //   .append('grant_type', 'authorization_code')
     //   .append('code', code)
     //   .append('code_verifier', codeVerifier)
-    //   .append('redirect_uri', environment.callbackUrl)
+    //   .append('redirect_uri', environment.redirectUrl)
     //   .append('client_id', environment.clientId);
 
     // const body = new URLSearchParams();
@@ -67,15 +67,11 @@ export class TokenService {
 
     const requestBody = {
       grant_type: 'authorization_code',
-      // client_id: environment.clientId,
+      client_id: environment.clientId,
       code: code,
       redirect_uri: environment.redirectUrl,
       code_verifier: codeVerifier,
     };
-
-    // return this.http.post<any>('/api/oauth/token', requestBody, {
-    //   headers: headers,
-    // });
 
     // return this.http.post<any>('/api/oauth/token', requestBody, {
     //   headers: headers,

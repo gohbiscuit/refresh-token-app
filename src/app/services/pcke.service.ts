@@ -42,6 +42,15 @@ export class PkceService {
       .replace(/\+/g, '-')
       .replace(/\//g, '_')
       .replace(/=+$/, '');
+
+    // const codeVerifierHash = CryptoJS.SHA256(codeVerifier).toString(
+    //   CryptoJS.enc.Base64
+    // );
+    // const codeChallenge = codeVerifierHash
+    //   .replace(/=/g, '')
+    //   .replace(/\+/g, '-')
+    //   .replace(/\//g, '_');
+    // return codeChallenge;
   }
 
   // base64URLEncode(str: string): string {
