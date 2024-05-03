@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Refresh Token App</title>
+    <style>
+      /* Add your custom CSS styling here */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+      .container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .info-box {
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <app-auth></app-auth>
+    <app-home></app-home>
+    <div class="container">
+      <h1>Refresh Token App</h1>
+      <div *ngIf="!isLoggedIn">
+        <button id="loginBtn" (click)="login()">Login</button>
+      </div>
+
+      <!-- Authentication State -->
+      <div class="info-box">
+        <h2>Authentication State</h2>
+        <p id="authState"></p>
+      </div>
+
+      <!-- Access Token and Refresh Token -->
+      <div class="info-box">
+        <h2>Access Token and Refresh Token</h2>
+        <p>
+          Access Token: <span id="accessToken">{{ accessToken }}</span>
+        </p>
+        <p>
+          Refresh Token: <span id="refreshToken">{{ refreshToken }}</span>
+        </p>
+      </div>
+
+      <!-- Cookie and LocalStorage State -->
+      <div class="info-box">
+        <h2>Cookie and LocalStorage State</h2>
+        <p id="cookieState"></p>
+        <p id="localStorageState"></p>
+      </div>
+    </div>
+  </body>
+</html>
