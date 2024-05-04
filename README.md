@@ -1,28 +1,42 @@
-# RefreshTokenApp
+# refresh-token-app
+
+> Authenticate against generic OAuth using PKCE
+> [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.6.
 
-## Development server
+[Angular Material](https://material.angular.io/)
+
+## Install
+
+Install all the node_modules
+
+```bash
+npm install
+```
+
+## Usage
+
+```ts
+Under config folder. Update the respective configurations if required to suit your needs.
+export const environment = {
+  production: false,
+  clientId: 'v1.0',
+  scope: 'openid profile',
+  redirectUrl: 'http://localhost:4200/redirect',
+  oauthLoginUrl: 'https://interview-api.vercel.app/api/authorize',
+  oauthTokenUrl: 'https://interview-api.vercel.app/api/oauth/token',
+};
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-## Code scaffolding
+export default App
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### End User Session on "Single Application Logout"
 
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+You can end user session when calling `logout(true)`. A custom endpoint can configured by passing `logoutEndpoint` as props. The user will be redirected to the `redirectUri`.
 
 ## Running unit tests
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
-# refresh-token-app

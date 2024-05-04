@@ -70,9 +70,6 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Check if user is already logged in
-    // const str = location.href.replace(location.search, '');
-    // console.log('str is >> ', str);
     if (this.isLoggedIn) {
       this.accessToken = '';
       this.refreshToken = this.tokenService.getRefreshToken() ?? '';
@@ -82,32 +79,16 @@ export class AppComponent implements OnInit {
 
   public login(): void {
     // Initiate login process
-    // this.authService.login().subscribe((response) => {
-    //   // Update tokens after successful login
-    //   console.log('login success');
-    //   this.accessToken = response.access_token;
-    //   this.refreshToken = response.refresh_token;
-    //   this.isLoggedIn = true;
-
-    //   this.tokenService.saveRefreshToken(this.refreshToken);
-    //   this.tokenService.saveAccessToken(this.accessToken);
-
-    //   console.log('accessToken', this.accessToken);
-    //   console.log('refreshToken', this.refreshToken);
-    // });
-    console.log('handle Login!!!');
     this.authService.login();
     this.isLoggedIn = true;
-    this.accessToken = '';
-    this.refreshToken = this.tokenService.getRefreshToken() ?? '';
   }
 
+  /* Step (6) */
   refreshTokens(): void {
     const refreshToken = this.tokenService.getRefreshToken();
     if (refreshToken) {
       this.tokenService.refreshToken(refreshToken).subscribe(
         (response) => {
-          console.log('Token refreshed successfully');
           const tokens = response as TokenResponse;
           const newRefreshToken = tokens.refresh_token;
           const accessToken = tokens.access_token;

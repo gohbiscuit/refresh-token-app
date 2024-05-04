@@ -35,6 +35,7 @@ export class TokenService {
       grant_type: 'authorization_code',
       client_id: environment.clientId,
       // client_secret: environment.clientSecret,
+      scope: environment.scope,
       code: code,
       redirect_uri: environment.redirectUrl,
       code_verifier: codeVerifier,

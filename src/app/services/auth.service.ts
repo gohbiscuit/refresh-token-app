@@ -21,13 +21,8 @@ export class AuthService {
     const codeVerifier = this.pckeService.generateCodeVerifier();
     const codeChallenge = this.pckeService.generateCodeChallenge(codeVerifier);
     const state = this.pckeService.generateRandomString(20);
-
-    console.log('codeVerifier length >> ' + codeVerifier.length);
-    console.log('codeChallenge length >> ' + codeChallenge.length);
-
     localStorage.setItem('state', state);
     localStorage.setItem('codeVerifier', codeVerifier);
-
     // Save code verifier in cookie
     this.saveCodeVerifierInCookie(state, codeVerifier);
     const authorizationUrl = this.generateAuthorizationUrl(
@@ -64,19 +59,9 @@ export class AuthService {
     return environment.oauthLoginUrl + `?${queryParams.toString()}`;
   }
 
-  /* Step 3 
-  In order to handle successful authorization redirect, upon loading the webpage, the SPA should check:
-
-  Are there state and code query params in the current URL?
-  If yes, is there a corresponding cookie saved with app.txs.{state} name?
-  If these both of these are true, the SPA should:
-
-  Get the value of the corresponding cookie (which is the original code_verifier)
-  Remove the cookie so it cannot be used again
-  Initiate a code → token exchange request
-*/
-
+  /* Step (3) to (5) */
   handleCodeExchangeAndDeleteCookie(state: string, code: string): void {
+    console.log('handleCodeExchangeAndDeleteCookie');
     const cookieName = `app.txs.${state}`;
     // Get the value of the corresponding cookie (which is the original code_verifier)
     const codeVerifier = this.cookieService.get(cookieName);
@@ -97,11 +82,13 @@ export class AuthService {
           ' something has gone wrong. Ensure authentication has taken place.'
       );
     }
-    // Initiate a code → token exchange request
+    // Step (4) - Initiate a code → token exchange request
     this.tokenService.getAccessTokenRequest(code, codeVerifier).subscribe(
       (response: any) => {
         const tokens = response as TokenResponse;
         const refreshToken = tokens.refresh_token;
+
+        // Step (5) save refresh token
         this.tokenService.saveRefreshToken(refreshToken);
       },
       (error: any) => {

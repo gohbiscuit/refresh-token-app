@@ -58,6 +58,7 @@ export class AuthComponent implements OnInit {
   ngOnInit() {
     this.refreshStateUI();
 
+    /* Step (3) */
     this.activatedRoute.queryParams.subscribe((params) => {
       const error = params['error'];
       if (!!error) {
@@ -68,8 +69,6 @@ export class AuthComponent implements OnInit {
         code: params['code'],
         state: params['state'],
       };
-      console.log('state is >>> ', response.state);
-      console.log('code is >>> ', response.code);
       const savedLocalStorageState = localStorage.getItem('state');
       if (
         response.state &&
