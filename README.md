@@ -10,7 +10,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 Recommended to install the following tools for this project
 
 1. [Visual Studio Code](https://code.visualstudio.com/) IDE
-2. [NodeJS] (https://nodejs.org/en) recommended version v20.12.2
+2. [NodeJS](https://nodejs.org/en) recommended version v20.12.2
 
 ## Install
 
