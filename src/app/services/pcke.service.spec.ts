@@ -13,7 +13,7 @@ describe('PkceService Tests', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should generate random alphanumeric state of length 20', () => {
+  it('should generate random alphanumeric state of correct length of 20', () => {
     const state = service.generateRandomString(20);
     expect(state.length).toBe(20);
     const regex = /^[a-zA-Z0-9-]*$/;
@@ -34,10 +34,9 @@ describe('PkceService Tests', () => {
     expect(regex.test(codeChallenge)).toBeTruthy();
   });
 
-  // Additional test to ensure the base64url encoding is done correctly
-  // it('should properly encode in base64url format', () => {
-  //   const input = new Uint8Array([43, 47, 61]); // Corresponds to '+/='
-  //   const result = service.base64UrlEncode(input);
-  //   expect(result).toEqual('K_Lw'); // Expected base64url output without '+', '/', and '='
-  // });
+  it('should encode Uint8Array to a URL-safe base64 string', () => {
+    const mockArray = new Uint8Array([72, 101, 108, 108, 111]);
+    const encoded = service.base64UrlEncode(mockArray);
+    expect(encoded).toBe('SGVsbG8');
+  });
 });

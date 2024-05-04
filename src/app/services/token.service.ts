@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TokenResponse } from '../models/token-response.model';
-import { environment } from '../environments/environment';
+import { environment } from '../config/config';
 
 @Injectable({
   providedIn: 'root',
@@ -31,44 +31,14 @@ export class TokenService {
       Accept: 'application/json',
     });
 
-    // const payload = new HttpParams()
-    //   .append('grant_type', 'authorization_code')
-    //   .append('code', code)
-    //   .append('code_verifier', codeVerifier)
-    //   .append('redirect_uri', environment.redirectUrl)
-    //   .append('client_id', environment.clientId);
-
-    // const body = new URLSearchParams();
-    // body.set('grant_type', 'authorization_code');
-    // body.set('client_id', environment.clientId);
-    // body.set('code', code);
-    // body.set('redirect_uri', environment.callbackUrl);
-    // body.set('code_verifier', codeVerifier);
-
-    // const requestBody = {
-    //   grant_type: 'authorization_code',
-    //   client_id: environment.clientId,
-    //   code: code,
-    //   redirect_uri: environment.callbackUrl,
-    //   code_verifier: codeVerifier,
-    // };
-
-    // "grant_type": "authorization_code",
-    // "code": "<code from URL query param>"
-    // "code_verifier": "<code_verifier from the corresponding cookie>"
-
     const requestBody = {
       grant_type: 'authorization_code',
       client_id: environment.clientId,
-      client_secret: environment.clientSecret,
+      // client_secret: environment.clientSecret,
       code: code,
       redirect_uri: environment.redirectUrl,
       code_verifier: codeVerifier,
     };
-
-    // return this.http.post<any>('/api/oauth/token', requestBody, {
-    //   headers: headers,
-    // });
 
     return this.http.post<any>(environment.oauthTokenUrl, requestBody, {
       headers: headers,

@@ -21,12 +21,6 @@ export class PkceService {
     return this.generateRandomString(43);
   }
 
-  // async generateCodeChallenge(codeVerifier: string): Promise<string> {
-  //   const encoded = new TextEncoder().encode(codeVerifier);
-  //   const hashed = await crypto.subtle.digest('SHA-256', encoded);
-  //   return this.base64UrlEncode(new Uint8Array(hashed));
-  // }
-
   base64UrlEncode(arrayBuffer: Uint8Array): string {
     return btoa(String.fromCharCode.apply(null, arrayBuffer as any))
       .replace(/\+/g, '-')
@@ -34,7 +28,6 @@ export class PkceService {
       .replace(/=+$/, '');
   }
 
-  // Generate code challenge based on code verifier
   generateCodeChallenge(codeVerifier: string): string {
     const hash = CryptoJS.SHA256(codeVerifier);
     const base64Encoded = CryptoJS.enc.Base64.stringify(hash);
@@ -42,18 +35,5 @@ export class PkceService {
       .replace(/\+/g, '-')
       .replace(/\//g, '_')
       .replace(/=+$/, '');
-
-    // const codeVerifierHash = CryptoJS.SHA256(codeVerifier).toString(
-    //   CryptoJS.enc.Base64
-    // );
-    // const codeChallenge = codeVerifierHash
-    //   .replace(/=/g, '')
-    //   .replace(/\+/g, '-')
-    //   .replace(/\//g, '_');
-    // return codeChallenge;
   }
-
-  // base64URLEncode(str: string): string {
-  //   return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-  // }
 }

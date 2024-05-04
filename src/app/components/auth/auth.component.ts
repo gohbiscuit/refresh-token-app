@@ -13,10 +13,8 @@ import { AuthorizationResponse } from '../../models/authorization-response.model
       </mat-card-header>
       <mat-card-content>
         <p *ngIf="isLoggedIn">Logged in</p>
-        <!-- <div *ngIf="isLoggedIn"> -->
         <p>Access Token: {{ accessToken }}</p>
         <p>Refresh Token: {{ refreshToken }}</p>
-        <!-- </div> -->
       </mat-card-content>
     </mat-card>
     <mat-card>
@@ -63,7 +61,7 @@ export class AuthComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe((params) => {
       const error = params['error'];
       if (!!error) {
-        console.error('AuthComponent error occurs on load>> ' + error);
+        alert('Error while loading page >> ' + error);
         return;
       }
       const response: AuthorizationResponse = {
@@ -73,24 +71,22 @@ export class AuthComponent implements OnInit {
       console.log('state is >>> ', response.state);
       console.log('code is >>> ', response.code);
       const savedLocalStorageState = localStorage.getItem('state');
-
       if (
         response.state &&
         response.code &&
         savedLocalStorageState === response.state
       ) {
-        this.authService.handleCodeExchangeAndDeleteCookie(
-          response.state,
-          response.code
-        );
+        try {
+          this.authService.handleCodeExchangeAndDeleteCookie(
+            response.state,
+            response.code
+          );
+        } catch (e) {
+          alert(e);
+        }
         this.refreshStateUI();
       } else {
-        console.log(
-          'different state > ' +
-            response.state +
-            '   vs local storage ' +
-            savedLocalStorageState
-        );
+        console.log('State is different, unable to exchange token');
       }
     });
   }
