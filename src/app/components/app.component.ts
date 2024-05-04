@@ -74,9 +74,7 @@ export class AppComponent implements OnInit {
   }
 
   public login(): void {
-    // Initiate login process
     this.authService.login();
-    this.isLoggedIn = true;
   }
 
   /* Step (6) */
