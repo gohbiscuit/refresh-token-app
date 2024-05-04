@@ -73,7 +73,6 @@ export class AuthComponent implements OnInit {
         state: params['state'],
       };
       const savedLocalStorageState = localStorage.getItem('state');
-      this.isLoggedIn = true;
       if (
         response.state &&
         response.code &&
@@ -83,6 +82,7 @@ export class AuthComponent implements OnInit {
           .handleCodeExchangeAndDeleteCookie(response.state, response.code)
           .subscribe(
             (tokenResponse: any) => {
+              this.isLoggedIn = true;
               const tokens = tokenResponse as TokenResponse;
               const refreshToken = tokens.refresh_token;
 

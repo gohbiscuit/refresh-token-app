@@ -30,8 +30,11 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The appli
 ```
 
 `redirectUri`: Url of the application should redirect to after `/authorize` with the Auth Server.
+
 `clientId` Id of the application
+
 `oauthLoginUrl` Authorization Url of the Authentication Server
+
 `oauthTokenUrl` Token Access Url of the Authentication Server
 
 ## Running unit tests

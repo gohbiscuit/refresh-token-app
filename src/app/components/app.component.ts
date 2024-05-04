@@ -70,10 +70,6 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (this.isLoggedIn) {
-      this.accessToken = '';
-      this.refreshToken = this.tokenService.getRefreshToken() ?? '';
-    }
     this.refreshTokens();
   }
 
@@ -87,6 +83,7 @@ export class AppComponent implements OnInit {
   refreshTokens(): void {
     const refreshToken = this.tokenService.getRefreshToken();
     if (refreshToken) {
+      this.refreshToken = refreshToken;
       this.tokenService.refreshToken(refreshToken).subscribe(
         (response) => {
           const tokens = response as TokenResponse;
