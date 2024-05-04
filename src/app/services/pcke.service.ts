@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { sha256 } from 'js-sha256';
 import * as CryptoJS from 'crypto-js';
 
 @Injectable({
