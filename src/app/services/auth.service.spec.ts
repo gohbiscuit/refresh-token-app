@@ -35,7 +35,6 @@ describe('AuthService Tests', () => {
       imports: [HttpClientModule, RouterTestingModule],
       providers: [
         AuthService,
-        // { provide: CookieService, useClass: MockCookieService },
         { provide: CookieService, useValue: cookieServiceSpy },
         { provide: TokenService, useValue: tokenServiceSpy },
         { provide: PkceService, useValue: pkceServiceSpy },
@@ -43,7 +42,6 @@ describe('AuthService Tests', () => {
     });
     pckeService = TestBed.inject(PkceService);
     service = TestBed.inject(AuthService);
-    // cookieService = TestBed.inject(CookieService);
 
     spyOn(localStorage, 'setItem');
     spyOn(localStorage, 'getItem').and.returnValue('some_code_verifier');
@@ -103,24 +101,23 @@ describe('AuthService Tests', () => {
     expect(service.redirectTo).toHaveBeenCalledWith(jasmine.any(String));
   });
 
-  it('should handle code exchange and delete cookie', () => {
-    const state = 'testState';
-    const code = 'authCode';
-    const codeVerifierFromCookie = 'some_code_verifier';
-    cookieServiceSpy.get.and.returnValue(codeVerifierFromCookie);
+  it('should exchange code and handle cookies correctly', () => {
+    const state = 'state';
+    const code = 'code';
+    const codeVerifier = 'some_code_verifier';
+    localStorage.setItem('codeVerifier', codeVerifier);
+    cookieServiceSpy.get.and.returnValue(codeVerifier);
     tokenServiceSpy.getAccessTokenRequest.and.returnValue(
-      of({ refresh_token: 'refreshToken' })
+      of({ accessToken: 'access123' })
     );
 
-    service.handleCodeExchangeAndDeleteCookie(state, code);
+    service.handleCodeExchangeAndDeleteCookie(state, code).subscribe();
 
+    expect(cookieServiceSpy.get).toHaveBeenCalledWith(`app.txs.${state}`);
     expect(cookieServiceSpy.delete).toHaveBeenCalledWith(`app.txs.${state}`);
     expect(tokenServiceSpy.getAccessTokenRequest).toHaveBeenCalledWith(
       code,
-      codeVerifierFromCookie
-    );
-    expect(tokenServiceSpy.saveRefreshToken).toHaveBeenCalledWith(
-      'refreshToken'
+      codeVerifier
     );
   });
 

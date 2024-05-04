@@ -4,7 +4,7 @@ import { TokenService } from './token.service';
 import { of } from 'rxjs';
 import { environment } from '../config/config';
 
-describe('TokenService', () => {
+describe('TokenService Tests', () => {
   let service: TokenService;
   let httpClientSpy: jasmine.SpyObj<HttpClient>;
 

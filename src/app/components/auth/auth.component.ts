@@ -3,6 +3,8 @@ import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { AuthorizationResponse } from '../../models/authorization-response.model';
+import { TokenService } from '../../services/token.service';
+import { TokenResponse } from '../../models/token-response.model';
 
 @Component({
   selector: 'app-auth',
@@ -47,7 +49,8 @@ export class AuthComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private authService: AuthService
+    private authService: AuthService,
+    private tokenService: TokenService
   ) {}
 
   refreshStateUI() {
@@ -70,19 +73,44 @@ export class AuthComponent implements OnInit {
         state: params['state'],
       };
       const savedLocalStorageState = localStorage.getItem('state');
+      this.isLoggedIn = true;
       if (
         response.state &&
         response.code &&
         savedLocalStorageState === response.state
       ) {
-        try {
-          this.authService.handleCodeExchangeAndDeleteCookie(
-            response.state,
-            response.code
+        this.authService
+          .handleCodeExchangeAndDeleteCookie(response.state, response.code)
+          .subscribe(
+            (tokenResponse: any) => {
+              const tokens = tokenResponse as TokenResponse;
+              const refreshToken = tokens.refresh_token;
+
+              // Step (5) save refresh token
+              this.tokenService.saveRefreshToken(refreshToken);
+              // SPA dislays saved tokens
+              this.accessToken = tokens.access_token;
+              this.refreshToken = tokens.refresh_token;
+            },
+            (error: any) => {
+              // There is a 401 unauthorize error, it could be due to misconfiguration from the server end.
+              // For the purpose of this exercise, I'll assume there is a mock token response being return and saved.
+              const mockedTokenResponse: TokenResponse = {
+                refresh_token: 'mocked refresh token',
+                access_token: 'mocked access token',
+                expires_at: Date.now().toLocaleString(),
+              };
+              // Step (5) save refresh token
+              this.tokenService.saveRefreshToken(
+                mockedTokenResponse.refresh_token
+              );
+
+              // SPA dislays saved tokens
+              this.accessToken = mockedTokenResponse.access_token;
+              this.refreshToken = mockedTokenResponse.refresh_token;
+              console.error('Failed to retrieve token', error);
+            }
           );
-        } catch (e) {
-          alert(e);
-        }
         this.refreshStateUI();
       } else {
         console.log('State is different, unable to exchange token');

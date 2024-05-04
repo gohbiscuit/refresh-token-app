@@ -59,7 +59,7 @@ import { TokenResponse } from '../models/token-response.model';
   ],
 })
 export class AppComponent implements OnInit {
-  title = 'refresh-token-app'; // Define the property here
+  title = 'refresh-token-app';
   isLoggedIn: boolean = false;
   accessToken: string = '';
   refreshToken: string = '';
@@ -73,8 +73,8 @@ export class AppComponent implements OnInit {
     if (this.isLoggedIn) {
       this.accessToken = '';
       this.refreshToken = this.tokenService.getRefreshToken() ?? '';
-      this.refreshTokens();
     }
+    this.refreshTokens();
   }
 
   public login(): void {
@@ -90,12 +90,12 @@ export class AppComponent implements OnInit {
       this.tokenService.refreshToken(refreshToken).subscribe(
         (response) => {
           const tokens = response as TokenResponse;
-          const newRefreshToken = tokens.refresh_token;
-          const accessToken = tokens.access_token;
+          this.refreshToken = tokens.refresh_token; // new refresh token
+          this.accessToken = tokens.access_token;
           const expiresAt = tokens.expires_at;
 
           // Replace old refresh token with new one in localStorage
-          this.tokenService.saveRefreshToken(newRefreshToken);
+          this.tokenService.saveRefreshToken(this.refreshToken);
         },
         (error: any) => {
           console.error('Failed to refresh token', error);
@@ -105,6 +105,7 @@ export class AppComponent implements OnInit {
   }
 
   logout(): void {
-    localStorage.clear();
+    this.isLoggedIn = false;
+    this.tokenService.clearTokens();
   }
 }

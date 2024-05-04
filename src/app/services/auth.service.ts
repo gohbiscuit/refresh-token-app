@@ -5,6 +5,7 @@ import { TokenService } from './token.service';
 import { environment } from '../config/config';
 
 import { PkceService } from './pcke.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -60,7 +61,10 @@ export class AuthService {
   }
 
   /* Step (3) to (5) */
-  handleCodeExchangeAndDeleteCookie(state: string, code: string): void {
+  handleCodeExchangeAndDeleteCookie(
+    state: string,
+    code: string
+  ): Observable<any> {
     console.log('handleCodeExchangeAndDeleteCookie');
     const cookieName = `app.txs.${state}`;
     // Get the value of the corresponding cookie (which is the original code_verifier)
@@ -83,17 +87,6 @@ export class AuthService {
       );
     }
     // Step (4) - Initiate a code → token exchange request
-    this.tokenService.getAccessTokenRequest(code, codeVerifier).subscribe(
-      (response: any) => {
-        const tokens = response as TokenResponse;
-        const refreshToken = tokens.refresh_token;
-
-        // Step (5) save refresh token
-        this.tokenService.saveRefreshToken(refreshToken);
-      },
-      (error: any) => {
-        console.error('Token exchange failed:', error);
-      }
-    );
+    return this.tokenService.getAccessTokenRequest(code, codeVerifier);
   }
 }
