@@ -1,8 +1,0 @@
-{
-  "/api": {
-    "target": "https://interview-api.vercel.app",
-    "secure": true,
-    "changeOrigin": true,
-    "loglevel": "debug"
-  }
-}
