@@ -5,6 +5,13 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.6 and [Angular Material](https://material.angular.io/)
 
+## Pre Requisite
+
+Recommended to install the following tools for this project
+
+1. [Visual Studio Code](https://code.visualstudio.com/) IDE
+2. [NodeJS] (https://nodejs.org/en) recommended version v20.12.2
+
 ## Install
 
 Install all the node_modules
