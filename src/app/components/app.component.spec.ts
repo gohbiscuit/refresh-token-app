@@ -23,7 +23,7 @@ describe('AppComponent', () => {
     authServiceMock = jasmine.createSpyObj('AuthService', ['login']);
     tokenServiceMock = jasmine.createSpyObj('TokenService', [
       'getRefreshToken',
-      'refreshToken',
+      'fetchAccessTokenUsingRefreshToken',
       'saveRefreshToken',
       'clearTokens',
     ]);
@@ -63,7 +63,7 @@ describe('AppComponent', () => {
   it('should refresh tokens on initialization if logged in', () => {
     component.isLoggedIn = true;
     tokenServiceMock.getRefreshToken.and.returnValue('existing-refresh-token');
-    tokenServiceMock.refreshToken.and.returnValue(
+    tokenServiceMock.fetchAccessTokenUsingRefreshToken.and.returnValue(
       of({
         access_token: 'new-access-token',
         refresh_token: 'new-refresh-token',
@@ -74,9 +74,9 @@ describe('AppComponent', () => {
     component.ngOnInit();
 
     expect(tokenServiceMock.getRefreshToken).toHaveBeenCalled();
-    expect(tokenServiceMock.refreshToken).toHaveBeenCalledWith(
-      'existing-refresh-token'
-    );
+    expect(
+      tokenServiceMock.fetchAccessTokenUsingRefreshToken
+    ).toHaveBeenCalledWith('existing-refresh-token');
     expect(component.refreshToken).toBe('new-refresh-token');
     expect(component.accessToken).toBe('new-access-token');
   });
@@ -95,11 +95,15 @@ describe('AppComponent', () => {
       expires_at: Date.now() + 1000,
     };
     tokenServiceMock.getRefreshToken.and.returnValue(refreshToken);
-    tokenServiceMock.refreshToken.and.returnValue(of(newTokens));
+    tokenServiceMock.fetchAccessTokenUsingRefreshToken.and.returnValue(
+      of(newTokens)
+    );
 
     component.refreshTokens();
 
-    expect(tokenServiceMock.refreshToken).toHaveBeenCalledWith(refreshToken);
+    expect(
+      tokenServiceMock.fetchAccessTokenUsingRefreshToken
+    ).toHaveBeenCalledWith(refreshToken);
     expect(component.refreshToken).toEqual('new-refresh-token');
     expect(component.accessToken).toEqual('new-access-token');
     expect(tokenServiceMock.saveRefreshToken).toHaveBeenCalledWith(
@@ -109,7 +113,7 @@ describe('AppComponent', () => {
 
   it('should handle errors in token refresh', () => {
     tokenServiceMock.getRefreshToken.and.returnValue('refresh-token');
-    tokenServiceMock.refreshToken.and.returnValue(
+    tokenServiceMock.fetchAccessTokenUsingRefreshToken.and.returnValue(
       throwError(() => new Error('Failed to refresh token'))
     );
 

@@ -84,20 +84,22 @@ export class AppComponent implements OnInit {
     const refreshToken = this.tokenService.getRefreshToken();
     if (refreshToken) {
       this.refreshToken = refreshToken;
-      this.tokenService.refreshToken(refreshToken).subscribe(
-        (response) => {
-          const tokens = response as TokenResponse;
-          this.refreshToken = tokens.refresh_token; // new refresh token
-          this.accessToken = tokens.access_token;
-          const expiresAt = tokens.expires_at;
+      this.tokenService
+        .fetchAccessTokenUsingRefreshToken(refreshToken)
+        .subscribe(
+          (response: any) => {
+            const tokens = response as TokenResponse;
+            this.refreshToken = tokens.refresh_token; // new refresh token
+            this.accessToken = tokens.access_token;
+            const expiresAt = tokens.expires_at;
 
-          // Replace old refresh token with new one in localStorage
-          this.tokenService.saveRefreshToken(this.refreshToken);
-        },
-        (error: any) => {
-          console.error('Failed to refresh token', error);
-        }
-      );
+            // Replace old refresh token with new one in localStorage
+            this.tokenService.saveRefreshToken(this.refreshToken);
+          },
+          (error: any) => {
+            console.error('Failed to refresh token', error);
+          }
+        );
     }
   }
 

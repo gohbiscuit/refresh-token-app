@@ -44,7 +44,9 @@ export class TokenService {
     });
   }
 
-  public refreshToken(refreshToken: string): Observable<any> {
+  public fetchAccessTokenUsingRefreshToken(
+    refreshToken: string
+  ): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded',
       Accept: 'application/json',

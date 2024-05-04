@@ -70,9 +70,11 @@ describe('TokenService Tests', () => {
     const mockResponse = { access_token: 'abcde' };
     httpClientSpy.post.and.returnValue(of(mockResponse));
 
-    service.refreshToken('refresh_token123').subscribe((response) => {
-      expect(response).toEqual(mockResponse);
-    });
+    service
+      .fetchAccessTokenUsingRefreshToken('refresh_token123')
+      .subscribe((response: any) => {
+        expect(response).toEqual(mockResponse);
+      });
 
     expect(httpClientSpy.post).toHaveBeenCalledWith(
       environment.oauthTokenUrl,
