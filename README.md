@@ -3,9 +3,7 @@
 > Authenticate against generic OAuth using PKCE
 > [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.6.
-
-[Angular Material](https://material.angular.io/)
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.6 and [Angular Material](https://material.angular.io/)
 
 ## Install
 
@@ -17,10 +15,10 @@ npm install
 
 ## Usage
 
+Under `config` folder. Update the respective configurations if required to suit your needs.
+
 ```ts
-Under config folder. Update the respective configurations if required to suit your needs.
 export const environment = {
-  production: false,
   clientId: 'v1.0',
   scope: 'openid profile',
   redirectUrl: 'http://localhost:4200/redirect',
@@ -33,9 +31,10 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The appli
 export default App
 ```
 
-### End User Session on "Single Application Logout"
-
-You can end user session when calling `logout(true)`. A custom endpoint can configured by passing `logoutEndpoint` as props. The user will be redirected to the `redirectUri`.
+`redirectUri`: Url of the application should redirect to after `/authorize` with the Auth Server.
+`clientId` Id of the application
+`oauthLoginUrl` Authorization Url of the Authentication Server
+`oauthTokenUrl` Token Access Url of the Authentication Server
 
 ## Running unit tests
 
