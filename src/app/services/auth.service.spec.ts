@@ -23,7 +23,7 @@ describe('AuthService Tests', () => {
       'delete',
     ]);
     tokenServiceSpy = jasmine.createSpyObj('TokenService', [
-      'getAccessTokenRequest',
+      'fetchAccessTokenUsingCode',
       'saveRefreshToken',
     ]);
     pkceServiceSpy = jasmine.createSpyObj('PkceService', [
@@ -107,7 +107,7 @@ describe('AuthService Tests', () => {
     const codeVerifier = 'some_code_verifier';
     localStorage.setItem('codeVerifier', codeVerifier);
     cookieServiceSpy.get.and.returnValue(codeVerifier);
-    tokenServiceSpy.getAccessTokenRequest.and.returnValue(
+    tokenServiceSpy.fetchAccessTokenUsingCode.and.returnValue(
       of({ accessToken: 'access123' })
     );
 
@@ -115,7 +115,7 @@ describe('AuthService Tests', () => {
 
     expect(cookieServiceSpy.get).toHaveBeenCalledWith(`app.txs.${state}`);
     expect(cookieServiceSpy.delete).toHaveBeenCalledWith(`app.txs.${state}`);
-    expect(tokenServiceSpy.getAccessTokenRequest).toHaveBeenCalledWith(
+    expect(tokenServiceSpy.fetchAccessTokenUsingCode).toHaveBeenCalledWith(
       code,
       codeVerifier
     );

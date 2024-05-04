@@ -93,7 +93,7 @@ export class AuthComponent implements OnInit {
               this.refreshToken = tokens.refresh_token;
             },
             (error: any) => {
-              // There is a 401 unauthorize error, it could be due to misconfiguration from the server end.
+              // There is a 401 unauthorize error, Checked errors.header, it's empty hence could be due to misconfiguration from the server end.
               // For the purpose of this exercise, I'll assume there is a mock token response being return and saved.
               const mockedTokenResponse: TokenResponse = {
                 refresh_token: 'mocked refresh token',

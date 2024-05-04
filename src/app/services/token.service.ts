@@ -22,7 +22,7 @@ export class TokenService {
     localStorage.clear();
   }
 
-  public getAccessTokenRequest(
+  public fetchAccessTokenUsingCode(
     code: string,
     codeVerifier: string
   ): Observable<any> {

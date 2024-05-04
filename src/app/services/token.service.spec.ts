@@ -47,7 +47,7 @@ describe('TokenService Tests', () => {
     httpClientSpy.post.and.returnValue(of(mockResponse));
 
     service
-      .getAccessTokenRequest('code123', 'verifier123')
+      .fetchAccessTokenUsingCode('code123', 'verifier123')
       .subscribe((response) => {
         expect(response).toEqual(mockResponse);
       });

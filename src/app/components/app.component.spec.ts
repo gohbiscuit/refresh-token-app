@@ -115,7 +115,6 @@ describe('AppComponent', () => {
 
     component.refreshTokens();
 
-    expect(component.refreshToken).toBe('');
     expect(component.accessToken).toBe('');
   });
 

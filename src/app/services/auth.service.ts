@@ -87,6 +87,6 @@ export class AuthService {
       );
     }
     // Step (4) - Initiate a code → token exchange request
-    return this.tokenService.getAccessTokenRequest(code, codeVerifier);
+    return this.tokenService.fetchAccessTokenUsingCode(code, codeVerifier);
   }
 }
