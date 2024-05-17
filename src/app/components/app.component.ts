@@ -29,11 +29,7 @@ import { TokenResponse } from '../models/token-response.model';
         </button>
       </span>
     </mat-toolbar>
-    <app-auth
-      [isLoggedIn]="isLoggedIn"
-      [accessToken]="accessToken"
-      [refreshToken]="refreshToken"
-    ></app-auth>
+    <router-outlet></router-outlet>
   `,
   styles: [
     `
@@ -75,6 +71,7 @@ export class AppComponent implements OnInit {
 
   public login(): void {
     this.authService.login();
+    this.isLoggedIn = true;
   }
 
   /* Step (6) */

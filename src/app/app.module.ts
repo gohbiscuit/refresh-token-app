@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { provideRouter } from '@angular/router';
+import { RouterModule, provideRouter } from '@angular/router';
 import { AppComponent } from './components/app.component';
 import { routes } from './app.routes';
 import { AuthComponent } from './components/auth/auth.component';
@@ -28,6 +28,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatMenuModule,
     MatIconModule,
     MatButtonModule,
+    RouterModule.forRoot([]), // Import RouterModule with your routes here
   ],
   providers: [provideRouter(routes), CookieService, provideAnimationsAsync()],
   bootstrap: [AppComponent],

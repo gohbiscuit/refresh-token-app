@@ -93,21 +93,6 @@ export class AuthComponent implements OnInit {
               this.refreshToken = tokens.refresh_token;
             },
             (error: any) => {
-              // There is a 401 unauthorize error, Checked errors.header, it's empty hence could be due to misconfiguration from the server end.
-              // For the purpose of this exercise, I'll assume there is a mock token response being return and saved.
-              const mockedTokenResponse: TokenResponse = {
-                refresh_token: 'mocked refresh token',
-                access_token: 'mocked access token',
-                expires_at: Date.now().toLocaleString(),
-              };
-              // Step (5) save refresh token
-              this.tokenService.saveRefreshToken(
-                mockedTokenResponse.refresh_token
-              );
-
-              // SPA dislays saved tokens
-              this.accessToken = mockedTokenResponse.access_token;
-              this.refreshToken = mockedTokenResponse.refresh_token;
               console.error('Failed to retrieve token', error);
             }
           );
